@@ -2,7 +2,7 @@
 -- CarbonTrack development test emission factors.
 -- Illustrative values only; verify factors before production.
 
-INSERT INTO emission_factors
+INSERT IGNORE INTO emission_factors
 (activity_type, unit, kg_co2e_per_unit, source, effective_date)
 VALUES
     ('CAR_PETROL', 'km', 0.18,

@@ -3,6 +3,10 @@ carbontrack
 $env:DB_USERNAME = "root"
 $env:DB_PASSWORD = "venkat@78"
 
+$env:DB_URL = "jdbc:mysql://localhost:3306/carbontrack"
+$env:DB_USERNAME = "root"
+$env:DB_PASSWORD = Read-Host "Enter password"
+
 .\mvnw.cmd spring-boot:run
 
 .\mvnw.cmd clean
@@ -26,6 +30,8 @@ $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
 $rng.GetBytes($bytes)
 $env:JWT_SECRET = [Convert]::ToBase64String($bytes)
 $rng.Dispose()
+
+Write-Output "JWT_SECRET configured for this terminal."
 
 $env:MAIL_USERNAME="venkateshreddy262878@gmail.com"
 $env:MAIL_PASSWORD="jqwv ahod uxof hfit"
