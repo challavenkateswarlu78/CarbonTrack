@@ -22,13 +22,7 @@ public class UserProfileService {
 
     @Transactional(readOnly = true)
     public UserProfileResponseDTO getMyProfile(String email) {
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "User not found"
-                ));
-
+        User user = findUser(email);
         return convertToDTO(user);
     }
 
@@ -37,11 +31,7 @@ public class UserProfileService {
             String email,
             UpdateProfileRequestDTO request) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "User not found"
-                ));
+        User user = findUser(email);
 
         String requestedUsername = request.getUsername().trim();
 
@@ -57,19 +47,57 @@ public class UserProfileService {
         user.setPreferredUnit(request.getPreferredUnit());
         user.setGoalVisibility(request.isGoalVisibility());
 
+        // Null means the field was omitted; blank means clear the field.
+        if (request.getFullName() != null) {
+            user.setFullName(normalizeOptional(request.getFullName()));
+        }
+
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(normalizeOptional(request.getPhoneNumber()));
+        }
+
+        if (request.getLocation() != null) {
+            user.setLocation(normalizeOptional(request.getLocation()));
+        }
+
+        if (request.getProfileImageUrl() != null) {
+            user.setProfileImageUrl(
+                    normalizeOptional(request.getProfileImageUrl())
+            );
+        }
+
         User savedUser = userRepository.save(user);
 
         return convertToDTO(savedUser);
+    }
+
+    private User findUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"
+                ));
+    }
+
+    private String normalizeOptional(String value) {
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private UserProfileResponseDTO convertToDTO(User user) {
         return new UserProfileResponseDTO(
                 user.getId(),
                 user.getUsername(),
+                user.getFullName(),
                 user.getEmail(),
+                user.getPhoneNumber(),
+                user.getLocation(),
+                user.getProfileImageUrl(),
                 user.getRole(),
                 user.getPreferredUnit(),
-                user.getGoalVisibility()
+                Boolean.TRUE.equals(user.getGoalVisibility()),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }
