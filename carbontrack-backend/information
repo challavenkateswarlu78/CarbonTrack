@@ -11,7 +11,7 @@ $env:DB_PASSWORD = Read-Host "Enter password"
 
 .\mvnw.cmd clean
 
-
+.\mvnw.cmd clean test
 
 # JWT settings
 app.jwt.secret=${JWT_SECRET}

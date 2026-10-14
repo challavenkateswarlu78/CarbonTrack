@@ -1,4 +1,9 @@
 package com.carbontrack.carbontrackbackend.dto.recommendation;
 
-public class RecommendationResponseDTO {
+import java.util.List;
+
+public record RecommendationResponseDTO(
+        int periodDays,
+        List<RecommendationItemDTO> recommendations
+) {
 }

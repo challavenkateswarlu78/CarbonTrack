@@ -1,10 +1,12 @@
 
-package com.carbontrack.carbontrackbackend.dto;
+package com.carbontrack.carbontrackbackend.dto.analytics;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class WeeklyFootprintDTO {
+public class WeeklyFootprintDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final LocalDate weekStartDate;
     private final String category;
